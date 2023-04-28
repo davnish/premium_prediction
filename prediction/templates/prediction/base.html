@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        
+        .container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2vmax;
+        }
+        .mainup{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1vmax;
+        }
+        /* .descimg img{
+            margin-left: 3vmax;
+            height: 22vmax;
+            border-radius: 60px;
+        } */
+        .mainmid{
+            padding: 1vmax;
+            border: 2px solid black;
+            border-radius: 30px;
+            padding: 1.4vmax;
+        }
+        .maindown{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1vmax;
+        }
+        .maindown button{
+            margin: 1vmax;
+            border: none;
+            padding: 0.7vmax;
+            border-radius: 30px;
+            background-color: rgba(0, 0, 0, 0.695);
+            color: white;
+        }
+        h4{
+            border-bottom: 2px solid black;
+            margin-bottom: 2vmax;
+        }
+    </style>
+     <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>Insurance Premium Prediction Model</h1>
+    <div class="container">
+        <div class="mainup">
+            <div class="desc">
+                <p>This is a multilinear regression model which is used to predict the premium which a customer has to give to the insurance company</p>
+                <p>A model description:</p>
+                <ul>
+                <li>R2_SCORE: {{ r2_score }}</li>
+                <li>MAE: {{ MAE }}</li>
+                <li>MSE: {{ MSE }}</li>
+                <li>RMSE: {{ RMSE }}</li>
+                </ul>
+            </div>
+            <!-- <div class="descimg">
+                <img src="https://thumbs.dreamstime.com/b/beautiful-rain-forest-ang-ka-nature-trail-doi-inthanon-national-park-thailand-36703721.jpg" alt="">
+            </div> -->
+        </div>
+        <div class = "mainmid">
+            <h4>Select the below parameters for your prediction</h4>
+            <label for="age">Enter your age:</label>
+            <input type="text" id="ageInput"><br>
+            <label for="bmi">Enter your BMI:</label>
+            <input type="text" id="bmi"><br>
+    
+            <label for="children">How many children do you have: </label>
+            <input type="text" id="children"><br>
+            
+            <p>Select your Gender: </p>
+            <input type="radio" id="Male" name="gender" value="1">
+            <label for="Male">Male</label>
+            <input type="radio" id="Female" name="gender" value="0">
+            <label for="Femawle">Female</label><br>
+    
+            <p>Are you Smoker: </p>
+            <input type="radio" id="Yes" name="smoker" value="1">
+            <label for="Yes">Yes</label>
+            <input type="radio" id="No" name="smoker" value="0">
+            <label for="No">No</label><br>
+    
+            <p>Select your Region: </p>
+            <input type="radio" id="region" name="region" value="00">
+            <label for="region">NorthEast</label>
+            <input type="radio" id="region" name="region" value="10">
+            <label for="region">NorthWest</label>
+            <input type="radio" id="region" name="region" value="01">
+            <label for="region">SouthEast</label>
+            <input type="radio" id="region" name="region" value="10">
+            <label for="region">SouthWest</label>
+            <br>
+            
+        </div>
+        <div class="maindown">
+            <button type="button" id="showinput" onclick="returnprediction()">Submit</button>
+            <div class="maindowninfo">
+                <label for="predictedInput">Predicted Value: </label>
+                <input type="text" id="predictedInput"><br>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function returnprediction(){
+            var age = $("#ageInput").val();
+            var bmi = $("#bmi").val();
+            var children = $("#children").val();
+            var gender = $("input[name=gender]:checked").val();
+            var smoker = $("input[name=smoker]:checked").val();
+            var region = $("input[name=region]:checked").val();
+
+            $.post('/modelprediction', {age: age, bmi: bmi, children: children, gender: gender, smoker: smoker ,region: region}, function(data){
+                // alert(data);
+                $("#predictedInput").val(data);
+            })
+        }
+    </script>
+</body>
+</html>
